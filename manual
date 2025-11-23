@@ -1,0 +1,54 @@
+Список всех активных (не заблокированных) учетных записей в AD:
+Get-ADUser -Filter {Enabled -eq "True"} | Select-Object SamAccountName,Name,Surname,GivenName | Format-Table
+
+shutdown /r /t 120 /m \\192.168.1.100 #Удаленная перезагрузка ПК
+
+Write-Host "<поздравляем! ваш первый скрипт успешно выполнен>"
+
+start-process powershell -verb runAs #Повышение прав PowerShell
+
+cd %userprofile%\Desktop\
+
+Enter-PSSession -ComputerName NAME-PC  #зайти на другой пк
+Exit-PSSession #выидти с другого пк
+
+Set-ItemProperty -Path "C:\1.txt" -Name Attributes -Value ([io.fileattributes]::Hidden) # Делает файл скрытым
+
+shutdown /r /t 120 /m \\192.168.1.100 #Удаленная перезагрузка ПК
+_______________________________________________________
+ $Computers = "WS-786F63.gsp-center.ru"     #командная строка от имени другого арм
+Invoke-Command -ComputerName $Computers -ScriptBlock {
+    ipconfig
+}
+______________________________________________________
+ 
+Get-ComputerInfo # полная информация о АРМ
+
+winget install --id Microsoft.Powershell --source winget #В Windows #используйте диспетчер пакетов Windows 
+( winget) для установки последней стабильной версии PowerShell 7
+
+Get-StartApps  #список меню пуск
+
+Set-Location -Path C:\Users\Admin\Desktop #размещение курсора
+
+Get-ChildItem HKLM:\HARDWARE #вывод информации по данному разделу реестра
+
+Remove-Item .\doc.txt #удалить файл
+
+Get-ChildItem -Path C:\Windows -Filter *.exe
+
+get-psdrive  #все диски
+
+Get-Content #командлет, используемый для чтения содержимого файлов и других элементов. 
+Он считывает данные и возвращает их в виде объектов, часто по одной строке за раз, что позволяет 
+просматривать или обрабатывать содержимое файла прямо в командной строке без его открытия в другом приложении
+
+Get-Service # это командлет PowerShell, который 
+используется для получения информации о службах Windows на локальном или удаленном компьютере 
+
+
+%echo #текст является псевдонимом для командлета Write-Output
+
+White-Host 'вывод текста'- одинарные ковычки выводят то что ввожу с клавиатуры
+
+combobox - список
