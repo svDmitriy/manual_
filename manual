@@ -52,3 +52,237 @@ Get-Service # это командлет PowerShell, который
 White-Host 'вывод текста'- одинарные ковычки выводят то что ввожу с клавиатуры
 
 combobox - список
+___________________________________________
+#Скрипт, создающий новую папку:
+$folderPath = «C:\Path\To\NewFolder»
+New-Item -ItemType Directory -Path $folderPath
+
+#Скрипт, удаляющий все файлы старше 7 дней в папке:
+$folderPath = «C:\Path\To\Folder»
+$limitDate = (Get-Date).AddDays(-7)
+Get-ChildItem $folderPath | Where-Object { $_.LastWriteTime -lt $limitDate } | Remove-Item
+
+#Скрипт, проверяющий статус службы:
+$serviceName = «wuauserv»
+$serviceStatus = Get-Service -Name $serviceName | Select-Object Status
+Write-Host «The status of service $serviceName is: $($serviceStatus.Status)»
+
+______________________________________________
+Как запустить скрипт PowerShell в фоновом режиме?
+Для этого используйте параметр -WindowStyle, который может принимать значения: Normal, Minimized, Maximized и Hidden. Чтобы запустить неподписанный скрипт в фоновом режиме, выполните команду:
+PowerShell -executionpolicy RemoteSigned -WindowStyle Hidden -file <имя_скрипта>
+
+Удаление ненужных приложений:
+С помощью следующего скрипта можно удалить предустановленные приложения:
+get-appxpackage -name *APPNAME* | remove-appxpackage
+_____________________________________________
+Управление процессами:
+Воспользуйтесь PowerShell для борьбы с медленными процессами. Выведите все службы:
+Get-Service
+
+Или получите информацию о конкретной службе с кодовым именем *NAME*:
+Get-Service *NAME*
+
+Создайте файл, который закрывает процессы с повышенным потреблением ресурсов:
+
+Stop-Service -Name *ANTIVIRUS*
+Stop-Service -Name *BROWSER*
+
+Замените *ANTIVIRUS* и *BROWSER* на соответствующие названия.
+
+Переименование группы файлов:
+Решите проблему однотипных файлов с помощью скрипта группового переименования:
+$path = «$comp\desktop\journey\russia»
+$filter = ‘*.jpg’
+get-childitem -path $path -filter $filter | rename-item -newname {$_.name -replace ‘HGNMD’,’RUSSIA’}
+
+Укажите путь, расширение и выполните замены в строке.
+
+Поиск файлов:
+Используйте PowerShell для поиска файлов в директории:
+Get-Childitem C:\Windows\*.log
+
+Для более сложного поиска в подпапках:
+Get-ChildItem C:\Windows\* -Include *.log -Recurse -Force
+
+Справка:
+Пользуйтесь командой *Get-Help* для получения информации:
+Get-Help Services
+
+ 
+
+Для более подробной справки по конкретной команде:
+
+ 
+
+Get-Help —Name *CMDLET*
+
+ 
+
+7. Получение информации о системе:
+Используйте PowerShell для получения данных о системе, например, уровне заряда аккумулятора:
+
+Add-Type -AssemblyName System.Windows.Forms
+[Windows.Forms.PowerStatus].GetConstructor(‘NonPublic, Instance’, $null, [Type[]]@(), $null ).Invoke($null)
+
+ 
+
+Информация об архитектуре процессора удаленного компьютера:
+[PSObject].Assembly.GetType(‘System.Management.Automation.PsUtils’).GetMethod(‘GetProcessorArchitecture’, [Reflection.BindingFlags]40).Invoke($null, @())
+
+Проверка прав администратора текущего пользователя:
+[PSObject].Assembly.GetType(‘System.Management.Automation.Utils’).GetMethod(‘IsAdministrator’, [Reflection.BindingFlags]40).Invoke($null, @())
+Эти простые и полезные сценарии помогут вам эффективнее управлять вашей системой Windows.
+
+Командные скрипты Windows
+Это общий термин, который включает в себя различные типы скриптов и командных файлов, используемых в операционной системе Windows для автоматизации задач.
+Включают в себя как скрипты на языке командной строки (например, скрипты CMD), так и на более современных языках, таких как PowerShell. 
+Например, Bat-скрипты (*.bat), PowerShell-скрипты (*.ps1), а также другие сценарии, созданные для автоматизации определенных задач.
+
+Bat-скрипты Windows
+Bat-скрипты, или файлы пакетных команд (Batch-файлы), представляют собой текстовые файлы, содержащие команды и инструкции для выполнения в командной строке Windows. 
+Основаны на языке пакетных команд (Batch scripting language). Расширение файла: *.bat* (например, *myscript.bat*).
+Пример простого bat-скрипта:
+
+«`batch
+@echo off
+echo Hello, World!
+pause
+
+Выполняемые скрипты Windows
+Это скрипты, которые могут быть выполнены в среде операционной системы Windows и обычно предназначены для автоматизации различных задач. 
+Включают в себя bat-скрипты (командные файлы), PowerShell-скрипты, а также другие типы скриптов, которые можно выполнять в Windows. 
+Общее отличие между bat-скриптами и PowerShell-скриптами заключается в языке программирования, используемом для написания команд и инструкций. 
+Bat-скрипты используют язык пакетных команд, который является устаревшим и имеет ограниченные возможности по сравнению с PowerShell, 
+который представляет более современный и мощный язык с разнообразными функциональными возможностями для автоматизации задач в Windows.
+
+Какое расширение имеют файлы скриптов PowerShell
+PowerShell-скрипты имеют расширение *.ps1*, и для их выполнения часто требуется предварительная настройка политики 
+выполнения скриптов (Execution Policy), чтобы разрешить запуск скрипта через PowerShell в системе.
+
+Скрипты PowerShell для администратора
+PowerShell — мощный инструмент для сисадминов Windows, предоставляя широкий набор команд и сценариев для автоматизации и управления системой. Ниже приведены несколько примеров PowerShell-скриптов, которые могут быть полезны администраторам:
+
+Создание резервной копии файлов:
+$sourcePath = «C:\Path\To\Source»
+$destinationPath = «D:\Backup»
+$timestamp = Get-Date -Format «yyyyMMddHHmmss»
+$backupFolder = «$destinationPath\Backup_$timestamp»
+Copy-Item -Path $sourcePath -Destination $backupFolder -Recurse
+
+Мониторинг дискового пространства:
+$threshold = 80
+$disks = Get-WmiObject Win32_LogicalDisk | Where-Object { $_.DriveType -eq 3 }
+foreach ($disk in $disks) {
+$freeSpacePercentage = [math]::Round(($disk.FreeSpace / $disk.Size) * 100, 2)
+$diskLetter = $disk.DeviceID
+if ($freeSpacePercentage -lt $threshold) {
+Write-Host «Warning: Disk $diskLetter is running low on free space ($freeSpacePercentage%)»
+
+# Можно добавить уведомление администратора
+}
+}
+
+ Создание нового пользователя:
+$username = «NewUser»
+$password = ConvertTo-SecureString «SecurePassword123» -AsPlainText -Force
+$fullname = «New User»
+$description = «Description of the new user»
+$ou = «OU=Users,DC=Domain,DC=com»
+New-ADUser -SamAccountName $username -UserPrincipalName «$username@domain.com» -Name $fullname -GivenName $fullname -Surname $username -Description $description -AccountPassword $password -Enabled $true -PassThru -Path $ou
+
+Мониторинг событий в журнале событий:
+$logName = «System»
+$events = Get-WinEvent -LogName $logName -MaxEvents 10
+foreach ($event in $events) {
+Write-Host «Event ID $($event.Id): $($event.Message)»
+}
+
+Обновление всех установленных модулей PowerShell:
+Get-Module -ListAvailable | ForEach-Object {
+Update-Module -Name $_.Name -Force
+}
+
+Удаление временных файлов в системной директории:
+$tempPath = [System.IO.Path]::GetTempPath()
+Remove-Item «$tempPath\*» -Force
+
+Создание отчета о состоянии служб:
+$services = Get-Service | Select-Object DisplayName, Status, StartType
+$services | Export-Csv -Path «C:\Path\To\ServiceReport.csv» -NoTypeInformation
+
+Настройка правил брандмауэра:
+
+New-NetFirewallRule -DisplayName «Allow-SSH» -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
+
+Удаление неиспользуемых профилей пользователей:
+$inactiveDays = 90
+$userProfiles = Get-WmiObject Win32_UserProfile | Where-Object { $_.Special -eq $false }
+foreach ($profile in $userProfiles) {
+$lastUseDate = $profile.LastUseTime
+$difference = (Get-Date) — $lastUseDate
+if ($difference.Days -ge $inactiveDays) {
+Remove-WmiObject -InputObject $profile -Confirm:$false
+Write-Host «User profile $($profile.LocalPath) deleted.»
+}
+}
+
+Эти примеры предоставляют общее представление о том, как PowerShell может использоваться администраторами для автоматизации различных задач в Windows-среде. 
+Помните, что некоторые команды могут потребовать выполнения от имени администратора.
+
+Для вызова скриптов PowerShell, вы можете использовать команду `Invoke-Expression` или просто указать путь к файлу скрипта. 
+Предположим, у вас есть следующие скрипты: `ClearDisk.ps1`, `InstallPrograms.ps1`, `BackupScript.ps1`, и `UpdateSystem.ps1`.
+
+Скрипт очистки диска (ClearDisk.ps1):
+# ClearDisk.ps1
+# Ваш код для очистки диска
+# Пример: удаление временных файлов
+Remove-Item -Path «$env:TEMP\*» -Recurse -Force
+Как вызвать:
+# Используйте Invoke-Expression
+Invoke-Expression -Command «.\ClearDisk.ps1»
+# Или просто указывайте путь к файлу скрипта
+.\ClearDisk.ps1
+
+Скрипт автоматической установки программ (InstallPrograms.ps1):
+# InstallPrograms.ps1
+# Ваш код для автоматической установки программ
+# Пример: установка программы Chocolatey и установка пакетов
+Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString(‘https://chocolatey.org/install.ps1’))
+choco install packageName -y
+
+Как вызвать:
+# Используйте Invoke-Expression
+Invoke-Expression -Command «.\InstallPrograms.ps1»
+
+# Или просто указывайте путь к файлу скрипта
+.\InstallPrograms.ps1
+
+Скрипт резервного копирования (BackupScript.ps1):
+# BackupScript.ps1
+# Ваш код для создания резервной копии
+# Пример: копирование файлов в другую директорию
+
+$sourcePath = «C:\Path\To\Source»
+$destinationPath = «D:\Backup»
+Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse
+
+Как вызвать:
+# Используйте Invoke-Expression
+Invoke-Expression -Command «.\BackupScript.ps1»
+# Или просто указывайте путь к файлу скрипта
+.\BackupScript.ps1
+
+ Скрипт автоматического обновления системы (UpdateSystem.ps1):
+# UpdateSystem.ps1
+# Ваш код для автоматического обновления системы
+# Пример: обновление всех установленных модулей PowerShell
+Get-Module -ListAvailable | ForEach-Object {
+Update-Module -Name $_.Name -Force
+}
+
+Как вызвать:
+# Используйте Invoke-Expression
+Invoke-Expression -Command «.\UpdateSystem.ps1»
+#Или просто указывайте путь к файлу скрипта
+.\UpdateSystem.ps1
