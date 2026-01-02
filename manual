@@ -3,10 +3,9 @@ Get-ADUser -Filter {Enabled -eq "True"} | Select-Object SamAccountName,Name,Surn
 
 shutdown /r /t 120 /m \\192.168.1.100 #Удаленная перезагрузка ПК
 
-
 start-process powershell -verb runAs #Повышение прав PowerShell
 
-cd %userprofile%\Desktop\
+cd %userprofile%\Desktop\#переход в каталог
 
 Enter-PSSession -ComputerName NAME-PC  #зайти на другой пк
 Exit-PSSession #выидти с другого пк
@@ -14,7 +13,7 @@ Exit-PSSession #выидти с другого пк
 Set-ItemProperty -Path "C:\1.txt" -Name Attributes -Value ([io.fileattributes]::Hidden) # Делает файл скрытым
 
 _______________________________________________________
- $Computers = "WS-786F63.gsp-center.ru"     #командная строка от имени другого арм
+ $Computers = "имяарм.домен"     #командная строка от имени другого арм
 Invoke-Command -ComputerName $Computers -ScriptBlock {
     ipconfig
 }
@@ -22,8 +21,8 @@ ______________________________________________________
  
 Get-ComputerInfo # полная информация о АРМ
 
-winget install --id Microsoft.Powershell --source winget #В Windows #используйте диспетчер пакетов Windows 
-( winget) для установки последней стабильной версии PowerShell 7
+winget install --id Microsoft.Powershell --source winget #В Windows используйте диспетчер пакетов Windows 
+(winget) для установки последней стабильной версии PowerShell 7
 
 Get-StartApps  #список меню пуск
 
@@ -43,74 +42,6 @@ Get-Content #командлет, используемый для чтения с
 
 Get-Service # это командлет используется для получения информации о службах Windows на локальном или удаленном компьютере 
 
-%echo #текст является псевдонимом для командлета Write-Output
-
-White-Host 'вывод текста'- одинарные ковычки выводят то что ввожу с клавиатуры
-___________________________________________
-#Скрипт, создающий новую папку:
-$folderPath = «C:\Path\To\NewFolder»
-New-Item -ItemType Directory -Path $folderPath
-
-#Скрипт, удаляющий все файлы старше 7 дней в папке:
-$folderPath = «C:\Path\To\Folder»
-$limitDate = (Get-Date).AddDays(-7)
-Get-ChildItem $folderPath | Where-Object { $_.LastWriteTime -lt $limitDate } | Remove-Item
-
-#Скрипт, проверяющий статус службы:
-$serviceName = «wuauserv»
-$serviceStatus = Get-Service -Name $serviceName | Select-Object Status
-Write-Host «The status of service $serviceName is: $($serviceStatus.Status)»
-
-______________________________________________
-Как запустить скрипт PowerShell в фоновом режиме?
-Для этого используйте параметр -WindowStyle, который может принимать значения: Normal, Minimized, Maximized и Hidden. 
-Чтобы запустить неподписанный скрипт в фоновом режиме, выполните команду:
-PowerShell -executionpolicy RemoteSigned -WindowStyle Hidden -file <имя_скрипта>
-
-Удаление ненужных приложений:
-С помощью следующего скрипта можно удалить предустановленные приложения:
-get-appxpackage -name *APPNAME* | remove-appxpackage
-_____________________________________________
-Управление процессами:
-Воспользуйтесь PowerShell для борьбы с медленными процессами. Выведите все службы:
-Get-Service
-
-Или получите информацию о конкретной службе с кодовым именем *NAME*:
-Get-Service *NAME*
-
-Создайте файл, который закрывает процессы с повышенным потреблением ресурсов:
-Stop-Service -Name *ANTIVIRUS*
-Stop-Service -Name *BROWSER*
-Замените *ANTIVIRUS* и *BROWSER* на соответствующие названия.
-
-Переименование группы файлов:
-Решите проблему однотипных файлов с помощью скрипта группового переименования:
-$path = «$comp\desktop\journey\russia»
-$filter = ‘*.jpg’
-get-childitem -path $path -filter $filter | rename-item -newname {$_.name -replace ‘HGNMD’,’RUSSIA’}
-
-Укажите путь, расширение и выполните замены в строке.
-Поиск файлов:
-Используйте PowerShell для поиска файлов в директории:
-Get-Childitem C:\Windows\*.log
-
-Для более сложного поиска в подпапках:
-Get-ChildItem C:\Windows\* -Include *.log -Recurse -Force
-
-Справка:
-Пользуйтесь командой *Get-Help* для получения информации:
-Get-Help Services
-
-Для более подробной справки по конкретной команде:
-Get-Help —Name *CMDLET*
-
-Получение информации о системе:
-Используйте PowerShell для получения данных о системе, например, уровне заряда аккумулятора:
-
-Add-Type -AssemblyName System.Windows.Forms
-[Windows.Forms.PowerStatus].GetConstructor(‘NonPublic, Instance’, $null, [Type[]]@(), $null ).Invoke($null)
-
- 
 Информация об архитектуре процессора удаленного компьютера:
 [PSObject].Assembly.GetType(‘System.Management.Automation.PsUtils’).GetMethod(‘GetProcessorArchitecture’, [Reflection.BindingFlags]40).Invoke($null, @())
 
@@ -118,146 +49,5 @@ Add-Type -AssemblyName System.Windows.Forms
 [PSObject].Assembly.GetType(‘System.Management.Automation.Utils’).GetMethod(‘IsAdministrator’, [Reflection.BindingFlags]40).Invoke($null, @())
 Эти простые и полезные сценарии помогут вам эффективнее управлять вашей системой Windows.
 
-Bat-скрипты Windows
-Bat-скрипты, или файлы пакетных команд (Batch-файлы), представляют собой текстовые файлы, содержащие команды и инструкции для выполнения в командной строке Windows. 
-Основаны на языке пакетных команд (Batch scripting language). Расширение файла: *.bat* (например, *myscript.bat*).
-Пример простого bat-скрипта:
 
-«`batch
-@echo off
-echo Hello, World!
-pause
 
-Создание резервной копии файлов:
-$sourcePath = «C:\Path\To\Source»
-$destinationPath = «D:\Backup»
-$timestamp = Get-Date -Format «yyyyMMddHHmmss»
-$backupFolder = «$destinationPath\Backup_$timestamp»
-Copy-Item -Path $sourcePath -Destination $backupFolder -Recurse
-______________________________________________________________________
-Мониторинг дискового пространства:
-$threshold = 80
-$disks = Get-WmiObject Win32_LogicalDisk | Where-Object { $_.DriveType -eq 3 }
-foreach ($disk in $disks) {
-    $freeSpacePercentage = [math]::Round(($disk.FreeSpace / $disk.Size) * 100, 2)
-    $diskLetter = $disk.DeviceID
-    if ($freeSpacePercentage -lt $threshold) {
-        Write-Host "Warning: Disk $diskLetter is running low on free space ($freeSpacePercentage%)"
-    }
-}
-______________________________________________________________________
-Создание нового пользователя:
-$username = «NewUser»
-$password = ConvertTo-SecureString «SecurePassword123» -AsPlainText -Force
-$fullname = «New User»
-$description = «Description of the new user»
-$ou = «OU=Users,DC=Domain,DC=com»
-New-ADUser -SamAccountName $username -UserPrincipalName «$username@domain.com» -Name $fullname -GivenName $fullname -Surname $username -Description $description -AccountPassword $password -Enabled $true -PassThru -Path $ou
-_______________________________________________________________________
-Мониторинг событий в журнале событий:
-# Указываем имя журнала событий Windows, из которого будем получать записи
-$logName = "System"
-# Получаем последние 10 событий из журнала "System"
-# Get-WinEvent — современный и быстрый cmdlet для чтения логов
-$events = Get-WinEvent -LogName $logName -MaxEvents 10
-# Перебираем каждое событие из полученного набора
-foreach ($event in $events) {
-    # Выводим разделитель для удобства чтения
-    Write-Host "========== EVENT =========="
-        # Вывод даты и времени создания события
-    Write-Host "Дата:       $($event.TimeCreated)"
-        # Вывод номера события (Event ID)
-    Write-Host "ID:         $($event.Id)"
-        # Вывод источника события (служба или компонент, который создал запись)
-    Write-Host "Источник:   $($event.ProviderName)"
-        # Вывод уровня события (Error, Warning, Information и т.п.)
-    Write-Host "Уровень:    $($event.LevelDisplayName)"
-        # Заголовок для сообщения
-    Write-Host "Сообщение:"
-        # Вывод текстового описания события
-    Write-Host $event.Message
-        # Пустая строка для визуального разделения событий
-    Write-Host ""
-}
-
-Обновление всех установленных модулей PowerShell:
-Get-Module -ListAvailable | ForEach-Object {
-Update-Module -Name $_.Name -Force
-}
-
-Удаление временных файлов в системной директории:
-$tempPath = [System.IO.Path]::GetTempPath()
-Remove-Item «$tempPath\*» -Force
-
-Создание отчета о состоянии служб:
-$services = Get-Service | Select-Object DisplayName, Status, StartType
-$services | Export-Csv -Path «C:\Path\To\ServiceReport.csv» -NoTypeInformation
-
-Настройка правил брандмауэра:
-New-NetFirewallRule -DisplayName «Allow-SSH» -Direction Inbound -Protocol TCP -LocalPort 22 -Action Allow
-
-Удаление неиспользуемых профилей пользователей:
-$inactiveDays = 90
-$userProfiles = Get-WmiObject Win32_UserProfile | Where-Object { $_.Special -eq $false }
-foreach ($profile in $userProfiles) {
-$lastUseDate = $profile.LastUseTime
-$difference = (Get-Date) — $lastUseDate
-if ($difference.Days -ge $inactiveDays) {
-Remove-WmiObject -InputObject $profile -Confirm:$false
-Write-Host «User profile $($profile.LocalPath) deleted.»
-}
-}
-__________________________________________________
-Скрипт очистки диска (ClearDisk.ps1):
-# ClearDisk.ps1
-# Ваш код для очистки диска
-# Пример: удаление временных файлов
-Remove-Item -Path «$env:TEMP\*» -Recurse -Force
-Как вызвать:
-# Используйте Invoke-Expression
-Invoke-Expression -Command «.\ClearDisk.ps1»
-# Или просто указывайте путь к файлу скрипта
-.\ClearDisk.ps1
-
-Скрипт автоматической установки программ (InstallPrograms.ps1):
-# InstallPrograms.ps1
-# Ваш код для автоматической установки программ
-# Пример: установка программы Chocolatey и установка пакетов
-Set-ExecutionPolicy Bypass -Scope Process -Force; iex ((New-Object System.Net.WebClient).DownloadString(‘https://chocolatey.org/install.ps1’))
-choco install packageName -y
-
-Как вызвать:
-# Используйте Invoke-Expression
-Invoke-Expression -Command «.\InstallPrograms.ps1»
-
-# Или просто указывайте путь к файлу скрипта
-.\InstallPrograms.ps1
-
-Скрипт резервного копирования (BackupScript.ps1):
-# BackupScript.ps1
-# Ваш код для создания резервной копии
-# Пример: копирование файлов в другую директорию
-
-$sourcePath = «C:\Path\To\Source»
-$destinationPath = «D:\Backup»
-Copy-Item -Path $sourcePath -Destination $destinationPath -Recurse
-
-Как вызвать:
-# Используйте Invoke-Expression
-Invoke-Expression -Command «.\BackupScript.ps1»
-# Или просто указывайте путь к файлу скрипта
-.\BackupScript.ps1
-
- Скрипт автоматического обновления системы (UpdateSystem.ps1):
-# UpdateSystem.ps1
-# Ваш код для автоматического обновления системы
-# Пример: обновление всех установленных модулей PowerShell
-Get-Module -ListAvailable | ForEach-Object {
-Update-Module -Name $_.Name -Force
-}
-
-Как вызвать:
-# Используйте Invoke-Expression
-Invoke-Expression -Command «.\UpdateSystem.ps1»
-#Или просто указывайте путь к файлу скрипта
-.\UpdateSystem.ps1
