@@ -1,3 +1,7 @@
+wmic csproduct get name - название пк
+
+wmic cpu get Caption - процессор пк
+
 Список всех активных (не заблокированных) учетных записей в AD:
 Get-ADUser -Filter {Enabled -eq "True"} | Select-Object SamAccountName,Name,Surname,GivenName | Format-Table
 
