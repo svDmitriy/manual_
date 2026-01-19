@@ -1,4 +1,20 @@
-wmic csproduct get name - название пк
+whoami /priv   #чтобы отобразить все привилегии, назначенные вашей учетной записи
+
+wmic csproduct get vendor - узнать производителя
+
+wmic bios get serialnumber - узнать серийный номер
+
+Invoke-Command WS-786F63.gsp-center.ru -ScriptBlock {Get-WmiObject win32_bios | Format-List SerialNumber } - серийный номер
+
+$systeminfo = systeminfo /FO csv | ConvertFrom-Csv –
+
+Invoke-Command имяпк.домен -ScriptBlock { Get-Disk | foreach { $_ | Get-StorageReliabilityCounter  }} - Удаленный опрос SMART
+
+Invoke-Command имяпк.домен -ScriptBlock { Get-Disk | Where-Object IsSystem -eq $True }   Параметры системного диска
+
+Invoke-Command имяпк.домен -ScriptBlock { Get-PhysicalDisk }      Просмотр типа диска
+
+wmic csproduct get name - узнать модель
 
 wmic cpu get Caption - процессор пк
 
