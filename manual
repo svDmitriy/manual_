@@ -18,6 +18,14 @@ wmic csproduct get name - узнать модель
 
 wmic cpu get Caption - процессор пк
 
+Список УЗ в домене пронумерованный:
+# Получаем список активных пользователей, сортируем по имени и присваиваем порядковые номера
+$users = Get-ADUser -Filter {Enabled -eq $true} -Server 'center.ru' -SearchBase 'DC=gsp-center,DC=ru' | Sort-Object Name
+# Формируем отчет с последовательной нумерацией
+for ($i = 1; $i -le $users.Count; $i++) {
+    Write-Output "$i. $($users[$i-1].Name)"
+}
+
 Список всех активных (не заблокированных) учетных записей в AD:
 Get-ADUser -Filter {Enabled -eq "True"} | Select-Object SamAccountName,Name,Surname,GivenName | Format-Table
 
